@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  backend:
+    build: ./Backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/kazam-todo
+      - JWT_SECRET=your_jwt_secret
+      - REFRESH_SECRET=your_refresh_secret
+      - FRONTEND_URL=http://localhost:3000
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
